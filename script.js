@@ -65,28 +65,52 @@
     ],
     experiences: [
       {
-        title: "IT Support Specialist",
-        company: "Various Organizations",
-        period: "Jan 2021 - Present",
+        title: "Tecnical Virtual Assistant",
+        company: "Freelance - Remote",
+        period: "Oct 2025 - Present",
         description:
-          "Managing comprehensive IT infrastructure including network troubleshooting, system security, and data backup solutions. Implementing and maintaining Altaro backup systems and Microsoft 365 environments to ensure business continuity and data protection.",
-        skills: ["Network Security", "System Administration", "Altaro Backup", "M365 Management", "Troubleshooting"],
+          "Focused on AI and no-code automation using Zapier, n8n, webhooks, and API integrations to streamline workflows and reduce manual tasks. Experienced in automating CRM systems, Google Workspace, and third-party tools with reliable trigger–action logic and data handling.",
+        skills: ["Go High Level", "Zapier", "n8n", "WebHooks", "API Integration"],
       },
       {
         title: "WordPress Developer",
-        company: "Freelance",
-        period: "Jun 2022 - Present",
+        company: "Freelance - Remote",
+        period: "Oct 2025 - Present",
         description:
-          "Creating modern, responsive WordPress websites with emphasis on performance optimization, user experience, and clean code architecture. Developing custom themes and implementing SEO best practices for enhanced online presence.",
-        skills: ["WordPress", "PHP", "JavaScript", "Responsive Design", "SEO"],
+          "Specialized in front-end website design using WordPress, Elementor, and custom CSS. Designed user-friendly interfaces focused on clean aesthetics, accessibility, and smooth navigation. Optimized website speed and UI elements for enhanced user experience.",
+        skills: ["WordPress", "Elementor", "CSS", "UI/UX Design"],
       },
       {
-        title: "Automation & Integration Specialist",
-        company: "Current Focus",
-        period: "Mar 2023 - Present",
+        title: "Customer Support Representative",
+        company: "Concentrix - Alabang, Muntinlupa",
+        period: "Aug 2023 - Oct 2025",
         description:
-          "Designing and implementing workflow automation solutions using Zapier, Make.com, and n8n. Integrating various business tools and AI-powered systems to streamline operations and increase productivity.",
-        skills: ["Zapier", "Make.com", "n8n", "API Integration", "Workflow Automation", "AI Tools"],
+          "Acted as first point of contact for inbound customer calls. Processed customer requests and guided users through troubleshooting steps. Collaborated with support team to validate suspected fraud calls.",
+        skills: ["Customer Support", "CRM", "Fraud Detection", "Communication"],
+      },
+      {
+        title: "Technical Support Engineer",
+        company: "Worldtext Systems Inc. - Makati",
+        period: "Nov 2021 - Mar 2023",
+        description:
+          "Diagnosed and resolved hardware issues on printers, desktops, laptops, and display panels. Managed cloud-based VM backup using Altaro. Configured Microsoft 365 for cloud and recovery environment including email security measures.",
+        skills: ["Hardware Support", "Microsoft 365", "Altaro VM Backup", "Network Admin"],
+      },
+      {
+        title: "IT Engineer",
+        company: "Scancode Technology Enterprise - San Pedro, Laguna",
+        period: "Jun 2020 - Aug 2021",
+        description:
+          "Provided on-call technical support for hardware, networking, and software issues. Developed internal task tracking system using Visual Studio and C#. Maintained enterprise WAN, LAN, and WLAN environments.",
+        skills: ["C#", "Visual Studio", "Network Admin", "Hardware Support"],
+      },
+      {
+        title: "Technical Support Representative",
+        company: "Infocom Technologies - Makati",
+        period: "Oct 2016 - Apr 2017",
+        description:
+          "Provided phone-based technical support to PLDT customers, assisting with internet connectivity, modem/router setup, and basic configuration. Diagnosed and resolved customer-reported service issues.",
+        skills: ["Technical Support", "DSL/Fiber", "CRM", "Troubleshooting"],
       },
     ],
     projects: [
@@ -385,11 +409,14 @@
     { label: 'Google Docs',      icon: '📄', cls: 'ti--google'    },
     { label: 'Asana',            icon: '◆', cls: 'ti--asana'     },
     { label: 'Slack',            icon: '♣', cls: 'ti--slack'     },
-    { label: 'Apollo',           icon: 'A',  cls: 'ti--apollo'    },
+    { label: 'Apollo AI',        icon: 'A',  cls: 'ti--apollo'    },
     { label: 'Xero',             icon: 'X',  cls: 'ti--xero'      },
     { label: 'Gemini',           icon: '✦', cls: 'ti--gemini'    },
     { label: 'Webhooks',         icon: '⇄', cls: 'ti--webhook'   },
     { label: 'CRM',              icon: '📈', cls: 'ti--crm'       },
+    { label: 'Lovable.dev',      icon: '💜', cls: 'ti--lovable'   },
+    { label: 'Cursor AI',        icon: '🖱', cls: 'ti--cursor'    },
+    { label: 'Claude AI',        icon: '🤖', cls: 'ti--claude'    },
     { label: 'Custom CSS',       icon: '⟨/⟩', cls: 'ti--generic'   },
     { label: 'Responsive Design',icon: '📱', cls: 'ti--generic'   },
   ];
@@ -402,7 +429,8 @@
       `<div class="tool-chip"><div class="tool-icon ${t.cls}">${t.icon}</div><span class="tool-label">${t.label}</span></div>`
     ).join('');
 
-    marquee.innerHTML = chips + chips;
+    // Create 3 copies for seamless infinite loop
+    marquee.innerHTML = chips + chips + chips;
   }
 
   renderMarquee();
