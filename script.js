@@ -146,20 +146,19 @@
   const year = $('[data-year]');
   if (year) year.textContent = String(new Date().getFullYear());
 
-  // --- Sticky navbar: delayed hide on scroll-down, instant show on scroll-up ---
+  // --- Sticky navbar ---
   const header = $('[data-header]');
   let lastScroll = 0;
-  let hideTimer = null;          // pending hide timeout
-  const HIDE_DELAY = 600;        // ms before the nav actually disappears
-  const DEAD_BAND  = 6;          // px — ignore tiny scroll noise
+  let hideTimer = null;
+  const HIDE_DELAY = 600;
+  const DEAD_BAND = 6;
 
   function showNav() {
-    if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+    if (hideTimer) clearTimeout(hideTimer); hideTimer = null;
     header.classList.remove('is-hidden');
     header.classList.add('is-visible');
   }
   function hideNav() {
-    // cancel any previous timer, then schedule a fresh one
     if (hideTimer) clearTimeout(hideTimer);
     hideTimer = setTimeout(() => {
       header.classList.remove('is-visible');
@@ -173,11 +172,11 @@
     const cur = window.scrollY || 0;
 
     if (cur <= 60) {
-      showNav();                  // always visible at the very top
+      showNav();
     } else if (cur < lastScroll - DEAD_BAND) {
-      showNav();                  // scrolling up  → show instantly
+      showNav();
     } else if (cur > lastScroll + DEAD_BAND) {
-      hideNav();                  // scrolling down → hide after delay
+      hideNav();
     }
 
     lastScroll = cur;
@@ -187,44 +186,51 @@
   handleHeaderScroll();
 
   // --- Mobile nav ---
-  const nav = $('[data-nav]');
+  const nav = $('#site-nav-mobile');
   const navToggle = $('[data-nav-toggle]');
   const navLinks = $$('[data-nav-link]');
 
   function setNavOpen(isOpen) {
     if (!nav || !navToggle) return;
-    nav.classList.toggle('is-open', isOpen);
+    nav.hidden = !isOpen;
     navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    document.body.style.overflow = isOpen ? 'hidden' : '';
   }
 
   if (navToggle && nav) {
-    navToggle.addEventListener('click', () => setNavOpen(!nav.classList.contains('is-open')));
-    navLinks.forEach((a) => {
-      a.addEventListener('click', (e) => {
-        // Allow normal open-in-new-tab behavior
+    navToggle.addEventListener('click', () => setNavOpen(nav.hidden));
+
+    navLinks.forEach((link) => {
+      link.addEventListener('click', (e) => {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
         setNavOpen(false);
       });
     });
 
     document.addEventListener('click', (e) => {
-      if (!nav.classList.contains('is-open')) return;
-      const within = nav.contains(e.target) || navToggle.contains(e.target);
-      if (!within) setNavOpen(false);
+      if (nav.hidden) return;
+      const isInsideMenu = nav.contains(e.target);
+      const isToggle = navToggle.contains(e.target);
+      if (!isInsideMenu && !isToggle) setNavOpen(false);
     });
   }
 
-  // --- Smooth scrolling (with respect for reduced motion) ---
+  // --- Smooth scrolling (no active/highlight logic) ---
   const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   navLinks.forEach((a) => {
     a.addEventListener('click', (e) => {
       const href = a.getAttribute('href') || '';
       if (!href.startsWith('#')) return;
+
       const target = $(href);
       if (!target) return;
+
       e.preventDefault();
       target.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'start' });
       history.replaceState(null, '', href);
+
+      // Close mobile menu if open
+      if (nav && !nav.hidden) setNavOpen(false);
     });
   });
 
@@ -254,31 +260,6 @@
     revealEls.forEach((el) => io.observe(el));
   } else {
     revealEls.forEach((el) => el.classList.add('is-visible'));
-  }
-
-  // --- Scrollspy (active nav item) ---
-  const sections = ['#home', '#about', '#services', '#techstack', '#experience', '#projects', '#contact']
-    .map((id) => $(id))
-    .filter(Boolean);
-
-  function setActiveNav(hash) {
-    navLinks.forEach((a) => {
-      const href = a.getAttribute('href');
-      a.classList.toggle('is-active', href === hash);
-    });
-  }
-
-  if ('IntersectionObserver' in window && sections.length) {
-    const spy = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => (b.intersectionRatio || 0) - (a.intersectionRatio || 0))[0];
-        if (visible?.target?.id) setActiveNav(`#${visible.target.id}`);
-      },
-      { root: null, threshold: [0.35, 0.55, 0.75], rootMargin: '-20% 0px -55% 0px' }
-    );
-    sections.forEach((s) => spy.observe(s));
   }
 
   // --- Services carousel render + controls ---
@@ -323,7 +304,6 @@
       dots.forEach((d, idx) => d.setAttribute('aria-current', idx === i ? 'true' : 'false'));
     }
 
-    // default dot
     setDot(0);
 
     dots.forEach((d) =>
@@ -378,12 +358,9 @@
 
   renderServices();
 
-  // --- Parallax (floating shapes) ---
+  // --- Parallax ---
   const parallaxEls = $$('[data-parallax]');
   if (!prefersReduced && parallaxEls.length) {
-    const base = new Map(parallaxEls.map((el) => [el, { x: 0, y: 0 }]));
-    parallaxEls.forEach((el) => base.set(el, { x: 0, y: 0 }));
-
     function applyParallax() {
       const y = window.scrollY || 0;
       parallaxEls.forEach((el) => {
@@ -421,12 +398,11 @@
     const marquee = $('[data-marquee]');
     if (!marquee) return;
 
-    // duplicate the tools twice so the marquee loops seamlessly
     const chips = tools.map(t =>
       `<div class="tool-chip"><div class="tool-icon ${t.cls}">${t.icon}</div><span class="tool-label">${t.label}</span></div>`
     ).join('');
 
-    marquee.innerHTML = chips + chips; // double for seamless loop
+    marquee.innerHTML = chips + chips;
   }
 
   renderMarquee();
@@ -483,11 +459,10 @@
       .join('');
   }
 
-  // --- Placeholder links (prevent broken '#' navigation) ---
+  // --- Placeholder links ---
   $$('[data-placeholder-link]').forEach((a) => {
     a.addEventListener('click', (e) => {
       const href = a.getAttribute('href') || '';
-      // Only intercept placeholders (avoid breaking real links like LinkedIn/CV)
       if (href && href !== '#') return;
       e.preventDefault();
       const what = a.getAttribute('data-placeholder-link') || 'URL';
@@ -495,7 +470,7 @@
     });
   });
 
-  // --- Contact form: open mail client (fast + no backend) ---
+  // --- Contact form ---
   const form = $('.contact-form');
   const status = $('[data-form-status]');
   if (form) {
@@ -529,4 +504,3 @@
   onScroll();
   toTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: prefersReduced ? 'auto' : 'smooth' }));
 })();
-

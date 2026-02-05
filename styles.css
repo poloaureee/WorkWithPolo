@@ -36,6 +36,7 @@ body {
   background: var(--bg);
   color: var(--text);
   line-height: 1.5;
+  overflow-x: hidden;
 }
 
 a {
@@ -199,19 +200,180 @@ img {
   font-weight: 600;
   font-size: 14px;
   color: rgba(244, 244, 247, 0.86);
-  transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+  transition: all 0.25s ease;
+  background: transparent; /* no background by default */
 }
-.nav-link:hover {
-  background: rgba(255, 255, 255, 0.04);
-}
-.nav-link.is-active {
-  background: linear-gradient(135deg, rgba(255, 138, 61, 0.95), rgba(255, 107, 53, 0.95));
-  color: #111;
-}
+/* Hover / focus effect (same on desktop and mobile) */
+.nav-link:hover,
 .nav-link:focus-visible {
-  outline: 3px solid var(--ring);
-  outline-offset: 2px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #111;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(255, 138, 61, 0.45);
+  transform: scale(1.05);
 }
+
+/* Remove any active/highlight styles completely */
+.nav-link.is-active,
+.nav-link:active {
+  background: transparent !important;
+  color: rgba(244, 244, 247, 0.86) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ===== Mobile Nav & Header Fixes ===== */
+@media (max-width: 760px) {
+  .nav-toggle {
+    display: flex !important;
+  }
+  .desktop-nav {
+    display: none !important;
+  }
+
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .section {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  main .container {
+    padding: 0 16px;
+  }
+  .nav-shell {
+    width: 100%;
+    max-width: calc(100% - 32px);
+    margin: 0 16px;
+    padding: 10px 16px;
+    justify-content: space-between;
+  }
+
+  .mobile-nav {
+    display: none;
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg);
+    z-index: 999;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 1.5rem 1rem;
+  }
+
+  .mobile-nav:not([hidden]) {
+    display: block;
+  }
+
+  .mobile-nav .nav-link.is-active {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #111 !important;
+    font-weight: 700;
+    padding: 1.1rem 1.4rem;
+    border-radius: 12px;
+  }
+}
+
+  .mobile-nav .nav-link {
+    display: block;
+    padding: 1.1rem 1.4rem;
+    font-size: 1.25rem;
+    border-radius: 12px;
+    margin: 0.4rem 0;
+    background: transparent;
+  }
+
+  /* Hover on mobile menu links */
+  .mobile-nav .nav-link:hover,
+  .mobile-nav .nav-link:focus-visible {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #111;
+    transform: scale(1.03);
+  }
+
+
+/* ===== Global Mobile Overflow & Stretching Fixes ===== */
+@media (max-width: 760px) {
+  html,
+  body {
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .about-grid {
+    gap: 5px;                  /* even more breathing room on small screens */
+  }
+
+  .container {
+    width: 100%;
+    max-width: none;
+    padding-left: 16px;
+    padding-right: 16px;
+    box-sizing: border-box;
+  }
+
+  .section,
+  .hero-grid,
+  .about-grid,
+  .contact-grid,
+  .project-grid,
+  .timeline {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding-left: 0;
+    padding-right: 0;
+    overflow-x: hidden;
+  }
+
+  .about-card {
+    padding: 24px 20px;
+  }
+  .about-card:first-child {
+    margin-bottom: 16px;        /* extra push if needed */
+  }
+}
+
+.meta-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 14px 0;
+  }
+
+  .meta dd {
+    font-size: 1rem;
+  }
+
+  .about-card,
+  .contact-card,
+  .contact-form,
+  .xp,
+  .project,
+  .service-card {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  .about-card{
+    padding: 16px, 0px;
+  }
+
+  [class*="grid"],
+  [class*="flex"] {
+    min-width: 0;
+  }
+
 
 /* ===== Sections ===== */
 .section {
@@ -403,20 +565,6 @@ img {
   background: radial-gradient(circle at 40% 30%, rgba(255, 138, 61, 0.95), rgba(255, 107, 53, 0.60));
   opacity: 0.35;
 }
-.avatar-initials {
-  position: absolute;
-  width: 190px;
-  height: 190px;
-  border-radius: 999px;
-  display: grid;
-  place-items: center;
-  background: rgba(10, 10, 12, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  font-size: 54px;
-  font-weight: 900;
-  letter-spacing: 0.06em;
-}
-
 .hero-photo {
   position: absolute;
   width: 260px;
@@ -514,18 +662,102 @@ img {
 /* ===== About ===== */
 .about-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  grid-template-columns: 1fr 1fr;       /* two columns on desktop */
+  gap: 24px;                            /* space between cards */
+  margin-top: 24px;
 }
+
 .about-card {
-  padding: 18px;
   border-radius: var(--radius);
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 28px 24px;
+  box-sizing: border-box;
 }
+
 .about-card h3 {
-  margin: 0 0 10px 0;
+  margin: 0 0 16px 0;
+  font-size: 1.4rem;
 }
+
+/* Core focus list */
+.about-card .list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.about-card .list li {
+  position: relative;
+  padding-left: 28px;
+  margin-bottom: 12px;
+  color: var(--muted);
+}
+
+.about-card .list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+  font-size: 1.4rem;
+}
+
+/* Quick details – meta */
+.about-card dl.meta {
+  margin: 0;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.10);
+}
+
+.meta-row:last-child {
+  border-bottom: none;
+}
+
+.meta dt {
+  color: var(--muted);
+  font-weight: 600;
+  min-width: 100px;
+}
+
+.meta dd {
+  margin: 0;
+  color: var(--text);
+}
+
+/* Mobile: stack vertically */
+@media (max-width: 760px) {
+  .about-grid {
+    grid-template-columns: 1fr;     /* one column on mobile */
+    gap: 36px;                      /* good vertical spacing on small screens */
+  }
+
+  .about-card {
+    padding: 24px 20px;
+  }
+
+  .meta-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 14px 0;
+  }
+
+  .meta dt {
+    min-width: auto;
+  }
+}
+.meta dd {
+  margin: 0;
+  color: var(--text);
+  font-weight: 500;
+}
+
 .list {
   margin: 0;
   padding-left: 18px;
@@ -534,25 +766,11 @@ img {
 .meta {
   margin: 0;
 }
-.meta-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.10);
-}
+
 .meta-row:last-child {
   border-bottom: 0;
 }
-.meta dt {
-  color: rgba(244, 244, 247, 0.9);
-  font-weight: 700;
-}
-.meta dd {
-  margin: 0;
-  color: var(--muted);
-}
+
 .meta a {
   text-decoration: underline;
   text-decoration-color: rgba(255, 138, 61, 0.4);
@@ -731,15 +949,28 @@ img {
 .project-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+  gap: 16px;                    /* desktop gap */
 }
+
+@media (max-width: 760px) {
+  .project-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;                  /* ← increased vertical spacing between cards on mobile */
+  }
+}
+
 .project {
   border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.10);
   background: rgba(255, 255, 255, 0.04);
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  height: 100%;
 }
+
 .project-top {
   height: 160px;
   background: rgba(255, 255, 255, 0.03);
@@ -754,13 +985,45 @@ img {
   display: block;
 }
 
-.xp-media {
-  margin: 12px 0 0 10px;
-  height: 170px;
-  border-radius: 16px;
-  overflow: hidden;
+.project-body {
+  padding: 20px;                /* increased padding inside card */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;                    /* space between title, description, tags, link */
+  flex-grow: 1;
+}
+
+.project h3 {
+  margin: 0;
+}
+
+.project p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.project a {
+  justify-self: start;
+  color: rgba(255, 138, 61, 0.95);
+  font-weight: 750;
+  margin-top: auto;             /* push link to bottom if needed */
+}
+
+.project a:hover {
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 138, 61, 0.45);
+}
+
+.project-pill {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(10, 10, 12, 0.55);
   border: 1px solid rgba(255, 255, 255, 0.10);
-  background: rgba(255, 255, 255, 0.03);
+  font-size: 12px;
+  color: rgba(244, 244, 247, 0.85);
 }
 
 .project-note {
@@ -769,7 +1032,7 @@ img {
   font-size: 14px;
 }
 
-/* ===== Parallax floating elements (no gradients) ===== */
+/* ===== Parallax floating elements ===== */
 .page {
   position: relative;
 }
@@ -807,38 +1070,6 @@ img {
   position: relative;
   z-index: 1;
 }
-.project-pill {
-  position: absolute;
-  left: 12px;
-  top: 12px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: rgba(10, 10, 12, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  font-size: 12px;
-  color: rgba(244, 244, 247, 0.85);
-}
-.project-body {
-  padding: 16px;
-  display: grid;
-  gap: 10px;
-}
-.project h3 {
-  margin: 0;
-}
-.project p {
-  margin: 0;
-  color: var(--muted);
-}
-.project a {
-  justify-self: start;
-  color: rgba(255, 138, 61, 0.95);
-  font-weight: 750;
-}
-.project a:hover {
-  text-decoration: underline;
-  text-decoration-color: rgba(255, 138, 61, 0.45);
-}
 
 /* ===== Tools Marquee ===== */
 .marquee-wrap {
@@ -849,7 +1080,7 @@ img {
 .marquee {
   display: flex;
   gap: 16px;
-  animation: marquee 40s linear infinite;
+  animation: marquee 5s linear infinite;
   will-change: transform;
 }
 .marquee:hover {
@@ -891,6 +1122,7 @@ img {
   font-weight: 650;
   color: var(--text);
 }
+
 /* tool-icon colors */
 .ti--zapier    { background: rgba(255, 49, 27, 0.20); color: #ff6b4a; }
 .ti--make      { background: rgba(103, 57, 255, 0.20); color: #9b7cff; }
@@ -1093,7 +1325,7 @@ img {
     grid-template-columns: 1fr;
   }
   .hero-art {
-    justify-items: start;
+    justify-items: center;
   }
   .hero-card {
     height: 520px;
@@ -1106,39 +1338,70 @@ img {
   }
 }
 
-@media (max-width: 760px) {
-  .nav {
-    display: none;
-    position: absolute;
-    inset: calc(var(--header-h) - 10px) 10px auto 10px;
-    padding: 10px;
-    border-radius: 22px;
-    flex-direction: column;
-    align-items: stretch;
-    background: rgba(10, 10, 12, 0.98);
-    backdrop-filter: blur(16px);
-    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6);
-  }
-  .nav.is-open {
-    display: flex;
-  }
-  .nav-link {
-    padding: 12px 14px;
-  }
-  .nav-toggle {
-    display: flex;
-  }
-  .section {
-    padding: 78px 0;
-  }
-  .about-grid {
-    grid-template-columns: 1fr;
-  }
-  .project-grid {
-    grid-template-columns: 1fr;
-  }
-  .service-card {
-    flex-basis: 86%;
-  }
+/* Active nav link - make it obvious */
+.nav-link.is-active,
+.desktop-nav .nav-link.is-active,
+.mobile-nav .nav-link.is-active {
+  background: linear-gradient(135deg, #ff8a3d, #ff6b35) !important;
+  color: #111 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 4px 14px rgba(255, 138, 61, 0.45) !important;
+  transform: scale(1.06) !important;
+  transition: all 0.25s ease;
 }
 
+/* Make sure it overrides any hover/active states */
+.nav-link.is-active:hover {
+  background: linear-gradient(135deg, #ff8a3d, #ff6b35) !important;
+  transform: scale(1.08) !important;
+}
+
+/* Focus ring for keyboard users */
+.nav-link:focus-visible {
+  outline: 3px solid rgba(255, 138, 61, 0.6) !important;
+  outline-offset: 2px;
+}
+
+/* Force-remove any active/highlight state on all nav links */
+.nav-link.is-active,
+.desktop-nav .nav-link.is-active,
+.mobile-nav .nav-link.is-active,
+.nav-link.active,
+.nav-link[aria-current="page"] {
+  background: transparent !important;
+  color: rgba(244, 244, 247, 0.86) !important;
+  font-weight: 600 !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* Only highlight on hover or focus */
+.nav-link:hover,
+.nav-link:focus-visible {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2)) !important;
+  color: #111 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 14px rgba(255, 138, 61, 0.45) !important;
+  transform: scale(1.05) !important;
+}
+
+/* Mobile menu links - same behavior */
+@media (max-width: 760px) {
+  .mobile-nav .nav-link {
+    background: transparent !important;
+  }
+
+  .mobile-nav .nav-link.is-active,
+  .mobile-nav .nav-link.active {
+    background: transparent !important;
+    color: rgba(244, 244, 247, 0.86) !important;
+    transform: none !important;
+  }
+
+  .mobile-nav .nav-link:hover,
+  .mobile-nav .nav-link:focus-visible {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)) !important;
+    color: #111 !important;
+    transform: scale(1.03) !important;
+  }
+}
